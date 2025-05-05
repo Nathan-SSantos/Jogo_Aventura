@@ -46,6 +46,27 @@ enemies = [{"pos": [100, 100], "speed": 2, "health": 3, "trap_time": time.time()
 coin_size = 20
 coins = [{"pos": [random.randint(0, WIDTH-coin_size), random.randint(0, HEIGHT-coin_size)]} for _ in range(10)]
 
+# Inicializando o mixer
+pygame.mixer.init()
+
+# Sons
+coin_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/moeda.mp3")
+attack_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/ataque.mp3")
+trap_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/armadilha.mp3")
+victory_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/vitoria.mp3")
+gameover_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/derrota.mp3")
+
+# Música de fundo
+pygame.mixer.music.load("C:/Users/Pc/Desktop/Jogo/sons/background.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)  # Loop infinito
+
+sound_enabled = True
+
+def play_sound(sound):
+    if sound_enabled:
+        sound.play()
+
 # Função para desenhar texto
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
@@ -64,6 +85,8 @@ def check_coin_collision():
     for coin in coins[:]:
         if (abs(player_pos[0] - coin["pos"][0]) < player_size) and (abs(player_pos[1] - coin["pos"][1]) < player_size):
             coins.remove(coin)
+            play_sound(coin_sound)
+
             print("Moeda coletada!")
 
 # Função para desenhar o jogador
@@ -117,6 +140,7 @@ def attack():
         if (abs(player_pos[0] - enemy["pos"][0]) < player_size) and (abs(player_pos[1] - enemy["pos"][1]) < player_size):
             enemy["health"] -= 1
             print(f"Inimigo atingido! Vidas restantes: {enemy['health']}")
+            play_sound(attack_sound)
             if enemy["health"] <= 0:
                 enemies.remove(enemy)
                 print("Inimigo derrotado!")
@@ -127,6 +151,7 @@ def enemy_place_traps():
         if time.time() - enemy["trap_time"] > 5:  # A cada 5 segundos
             enemy_traps.append(enemy["pos"].copy())
             enemy["trap_time"] = time.time()
+            play_sound(trap_sound)
             print("Inimigo colocou uma armadilha!")
 
 # Função para desenhar armadilhas
@@ -142,6 +167,7 @@ def check_trap_collision():
         if (abs(player_pos[0] - trap[0]) < player_size // 2) and (abs(player_pos[1] - trap[1]) < player_size // 2):
             player_health -= 1
             enemy_traps.remove(trap)  # Remove a armadilha após o dano
+            play_sound(trap_sound)
             print(f"Você foi atingido por uma armadilha! Vidas restantes: {player_health}")
 
     # Checando se o inimigo passa por uma armadilha
@@ -159,6 +185,7 @@ def check_trap_collision():
 def check_victory():
     if len(enemies) == 0 and len(coins) == 0:
         # Desenha mensagem de vitória
+        play_sound(victory_sound)
         draw_text("Você venceu!", font, BLUE, screen, WIDTH // 2, HEIGHT // 2 - 50)  # Mensagem de vitória
         
         # Desenha instruções para jogar novamente ou voltar ao menu
@@ -272,6 +299,7 @@ def game_loop():
             # Checando condição de vitória
             if check_victory():
                 game_over = True
+                play_sound(gameover_sound)
 
             # Verifica se o jogador ainda tem vidas
             if player_health <= 0:
@@ -302,6 +330,8 @@ def game_loop():
         
 # Função para mostrar informações ao pressionar J
 def show_info():
+    global sound_enabled
+
     showing_info = True
     while showing_info:
         screen.fill(WHITE)
@@ -321,44 +351,55 @@ def show_info():
         # Objetivo do jogo
         draw_text("Objetivo: Colete todas as moedas e derrote todos os inimigos para vencer!", small_font, BLACK, screen, WIDTH // 2, HEIGHT // 2 + 130)
 
-        # Instrução para voltar ao menu
+        # Instruções adicionais
         draw_text("M para voltar ao menu", small_font, BLACK, screen, WIDTH // 2, HEIGHT // 2 + 160)
-
-        # Verifica eventos para sair da tela de informações
+        
+        # Verifica eventos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_m:  # Voltar ao menu
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_m:
                     showing_info = False
+                elif event.key == pygame.K_s:
+                    sound_enabled = not sound_enabled
+                    if sound_enabled:
+                        pygame.mixer.music.play(-1)
+                    else:
+                        pygame.mixer.music.stop()
 
         pygame.display.update()
+
 
 # Função para o menu principal
 def main_menu():
+    global sound_enabled
+
     while True:
         screen.fill(WHITE)
-        draw_text("Menu Principal", font, BLACK, screen, WIDTH // 2, HEIGHT // 4)
-
-        draw_text("C para Começar", font, BLACK, screen, WIDTH // 2, HEIGHT // 2 - 50)
-        draw_text("J para Mostrar Informações", font, BLACK, screen, WIDTH // 2, HEIGHT // 2)
-        draw_text("Q para Sair", font, BLACK, screen, WIDTH // 2, HEIGHT // 2 + 50)
+        draw_text("Bem-vindo à Aventura!", font, BLACK, screen, WIDTH // 2, HEIGHT // 4)
+        draw_text("Aperte ENTER para começar", small_font, BLACK, screen, WIDTH // 2, HEIGHT // 2 - 20)
+        draw_text("Aperte J para ver informações do jogo", small_font, BLACK, screen, WIDTH // 2, HEIGHT // 2 + 20)
+        draw_text(f"Aperte S para {'Desligar ou Ligar'} Som", small_font, BLACK, screen, WIDTH // 2, HEIGHT // 2 + 60)
+        pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
+                if event.key == pygame.K_RETURN:
                     game_loop()
-                if event.key == pygame.K_j:
+                elif event.key == pygame.K_j:
                     show_info()
-                if event.key == pygame.K_q:
-                    pygame.quit()
-                    sys.exit()
+                elif event.key == pygame.K_s:
+                    sound_enabled = not sound_enabled
+                    if sound_enabled:
+                        pygame.mixer.music.play(-1)
+                    else:
+                        pygame.mixer.music.stop()
 
-        pygame.display.update()
 
 # Iniciando o jogo com o menu principal
 main_menu()
