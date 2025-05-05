@@ -50,14 +50,14 @@ coins = [{"pos": [random.randint(0, WIDTH-coin_size), random.randint(0, HEIGHT-c
 pygame.mixer.init()
 
 # Sons
-coin_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/moeda.mp3")
-attack_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/ataque.mp3")
-trap_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/armadilha.mp3")
-victory_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/vitoria.mp3")
-gameover_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/derrota.mp3")
+coin_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/moeda.mp3") #LEMBRE DE ALTERAR O CAMINNHO
+attack_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/ataque.mp3") #LEMBRE DE ALTERAR O CAMINNHO 
+trap_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/armadilha.mp3") #LEMBRE DE ALTERAR O CAMINNHO 
+victory_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/vitoria.mp3") #LEMBRE DE ALTERAR O CAMINNHO 
+gameover_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/derrota.mp3") #LEMBRE DE ALTERAR O CAMINNHO 
 
 # Música de fundo
-pygame.mixer.music.load("C:/Users/Pc/Desktop/Jogo/sons/background.mp3")
+pygame.mixer.music.load("C:/Users/Pc/Desktop/Jogo/sons/background.mp3") #LEMBRE DE ALTERAR O CAMINNHO
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)  # Loop infinito
 
