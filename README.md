@@ -43,3 +43,13 @@ Este é um jogo desenvolvido em Python utilizando a biblioteca Pygame. O jogador
 ## Requisitos
 
 Para rodar o jogo, você precisa ter o Python e o Pygame instalados.
+
+###### TODOS OS SONS FORAM RETIRADOS DESTE SITE:
+Sound Effect from Pixabay
+https://pixabay.com/pt/sound-effects/
+
+
+
+
+
+
