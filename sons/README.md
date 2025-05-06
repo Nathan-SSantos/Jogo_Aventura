@@ -4,10 +4,9 @@ Música de fundo – Arquivo tocado durante o gameplay.
 Efeitos sonoros – Sons para ações como ataque, coleta de moedas, dano, etc.
 
 ## Caminhos dos Arquivos
-No código Python, os sons são carregados usando caminhos relativos. 
-Isso significa que os arquivos devem estar exatamente dentro da pasta sons, que está no mesmo diretório do arquivo principal do jogo (main.py).
+No código Python, os sons são carregados usando caminhos de seus arquivos.
 
-Exemplo de como o som é carregado no código:
+## Exemplo de como o som é carregado no código: 
 coin_sound = pygame.mixer.Sound("C:/Users/Pc/Desktop/Jogo/sons/moeda.mp3")
 pygame.mixer.music.load("C:/Users/Pc/Desktop/Jogo/sons/background.mp3") 
 
