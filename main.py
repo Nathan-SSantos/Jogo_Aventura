@@ -299,10 +299,10 @@ def game_loop():
             # Checando condição de vitória
             if check_victory():
                 game_over = True
-                play_sound(gameover_sound)
 
             # Verifica se o jogador ainda tem vidas
             if player_health <= 0:
+                play_sound(gameover_sound)
                 screen.fill(WHITE)
                 draw_text("Você perdeu todas as suas vidas!", font, RED, screen, WIDTH // 2, HEIGHT // 2 - 50)
                 draw_text("Aperte R para reiniciar", small_font, BLACK, screen, WIDTH // 2, HEIGHT // 2 + 10)
